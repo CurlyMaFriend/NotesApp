@@ -13,6 +13,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbarListNotes = findViewById(R.id.toolbarNotes);
+        toolbarListNotes = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbarListNotes);
 
@@ -76,4 +80,5 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         //}
     }
+
 }

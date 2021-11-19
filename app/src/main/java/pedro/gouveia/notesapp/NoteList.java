@@ -9,11 +9,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -25,6 +29,7 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
     private MyViewModel viewModel;
     private ArrayList<Note> notesArray;
     private ListView listViewNotes;
+    private ArrayAdapter<Note> adapter;
 
     public NoteList() {
         // Required empty public constructor
@@ -35,7 +40,7 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_note_list, container, false);
-
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -49,7 +54,7 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
 
         this.notesArray = viewModel.getNotes().getValue();
 
-        ArrayAdapter<Note> adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, this.notesArray);
+        adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, this.notesArray);
         listViewNotes.setAdapter(adapter);
 
         listViewNotes.setOnItemClickListener(this);
@@ -59,5 +64,41 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String title = adapterView.getItemAtPosition(i).toString();
         Log.d("teste", "Clicked: " + title);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_list_notes, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Type to search notes by title");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.create_note){
+            Log.d("teste", "Create note pressed");
+        }
+        return true;
     }
 }

@@ -9,4 +9,11 @@
     android:id="@+id/toolbarNotes"
     >
 
+    <item
+        android:title="Search"
+        android:icon="@drawable/ic_search"
+        android:id="@+id/search"
+        app:showAsAction="ifRoom"/>
+
+
 </androidx.appcompat.widget.Toolbar>
