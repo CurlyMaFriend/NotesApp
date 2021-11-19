@@ -2,12 +2,14 @@ package pedro.gouveia.notesapp;
 
 public class Note {
 
+    private int id;
     private String title;
     private String description;
 
     public Note() {  }
 
-    public Note(String aTitle, String aDescription) {
+    public Note(int aId, String aTitle, String aDescription) {
+        this.id = aId;
         this.title = aTitle;
         this.description = aDescription;
     }
@@ -28,12 +30,13 @@ public class Note {
         this.description = description;
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     @Override
     public String toString() {
-        return "Note{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return this.title;
     }
 
 }
