@@ -61,6 +61,8 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
 
         listViewNotes.setOnItemClickListener(this);
 
+        listViewNotes.setScrollContainer(true);
+
         listViewNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> adapterView, View v,
