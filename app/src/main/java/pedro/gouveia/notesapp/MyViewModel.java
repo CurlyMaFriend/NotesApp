@@ -65,36 +65,47 @@ public class MyViewModel extends ViewModel {
             ArrayList<Note> noteArrayList = new ArrayList<>();
             boolean primeiro = true;
             int i = 0;
-            for ( String str : strArray) {
-                if(!primeiro){
-                    str = str.substring(1);
-                }
-                primeiro = false;
-                try {
-                    int id = Integer.parseInt(str.substring(0,str.indexOf('-')));
-                    String title = str.substring(str.indexOf('-')+1);
-                    String description = "";
-                    for (String des: descriptions) {
-                        if(Integer.parseInt(des.substring(0,des.indexOf('-'))) == id){
-                            description = des.substring(des.indexOf('-')+1);
-                            break;
-                        }
+            if(strArray.length == 0 || strArray[0].equals("")){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setNotes(new ArrayList<Note>());
+                        setSaveDone();
                     }
+                });
+            } else {
+                for ( String str : strArray) {
+                    if(!primeiro){
+                        str = str.substring(1);
+                    }
+                    primeiro = false;
+                    try {
+                        int id = Integer.parseInt(str.substring(0,str.indexOf('-')));
+                        String title = str.substring(str.indexOf('-')+1);
+                        String description = "";
+                        for (String des: descriptions) {
+                            if(Integer.parseInt(des.substring(0,des.indexOf('-'))) == id){
+                                description = des.substring(des.indexOf('-')+1);
+                                break;
+                            }
+                        }
 
-                    noteArrayList.add(new Note(id, title, description));
-                } catch (NumberFormatException nfe) {
-                    Log.d("Erros", nfe.toString());
+                        noteArrayList.add(new Note(id, title, description));
+                    } catch (NumberFormatException nfe) {
+                        Log.d("Erros", nfe.toString());
+                    }
+                    i++;
                 }
-                i++;
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setNotes(noteArrayList);
+                        setSaveDone();
+                    }
+                });
+
             }
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    setNotes(noteArrayList);
-                    setSaveDone();
-                }
-            });
         } else {
             handler.post(new Runnable() {
                 @Override
