@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -33,6 +34,7 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
     private ArrayList<Note> notesArray;
     private ListView listViewNotes;
     private ArrayAdapter<Note> adapter;
+    private TextView txtNoNotes;
 
     public NoteList() {
         // Required empty public constructor
@@ -54,32 +56,40 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
         viewModel = new ViewModelProvider(requireActivity()).get(MyViewModel.class);
 
         listViewNotes = view.findViewById(R.id.listViewNotes);
+        txtNoNotes = view.findViewById(R.id.txtNoNotes);
 
         this.notesArray = viewModel.getNotes().getValue();
 
-        adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, this.notesArray);
-        listViewNotes.setAdapter(adapter);
+        if(this.notesArray.size() == 0){
+            listViewNotes.setVisibility(View.GONE);
+            txtNoNotes.setVisibility(View.VISIBLE);
+        } else {
+            listViewNotes.setVisibility(View.VISIBLE);
+            txtNoNotes.setVisibility(View.GONE);
+            adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, this.notesArray);
+            listViewNotes.setAdapter(adapter);
 
-        listViewNotes.setOnItemClickListener(this);
+            listViewNotes.setOnItemClickListener(this);
 
-        listViewNotes.setScrollContainer(true);
+            listViewNotes.setScrollContainer(true);
 
-        listViewNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            listViewNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-            public boolean onItemLongClick(AdapterView<?> adapterView, View v,
-                                           int i, long l) {
-                Note note = notesArray.get(i);
+                public boolean onItemLongClick(AdapterView<?> adapterView, View v,
+                                               int i, long l) {
+                    Note note = notesArray.get(i);
 
-                customDialog cdd=new customDialog(requireActivity(), note.getId(), note.getTitle());
-                cdd.show();
+                    customDialog cdd=new customDialog(requireActivity(), note.getId(), note.getTitle());
+                    cdd.show();
 
 
-                Window window = cdd.getWindow();
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    Window window = cdd.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-                return true;
-            }
-        });
+                    return true;
+                }
+            });
+        }
     }
 
     @Override
