@@ -1,7 +1,5 @@
 package pedro.gouveia.notesapp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -12,12 +10,17 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity {
 
     private MyViewModel viewModel;
     private Toolbar toolbarListNotes;
     private FragmentManager fm;
     private FragmentTransaction ft;
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,14 @@ public class MainActivity extends AppCompatActivity {
         if(findViewById(R.id.frameView) != null){
             viewModel = new ViewModelProvider(this).get(MyViewModel.class);
 
-            viewModel.retrieveData(this);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    viewModel.retrieveData(getApplicationContext());
+                }
+            });
+
+            executor.execute(t);
 
             Log.d("teste", "Antes do observver");
             viewModel.getNotes().observe(this, item ->{

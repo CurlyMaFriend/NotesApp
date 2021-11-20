@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +48,19 @@ public class NoteNew extends Fragment {
 
         txtTitle = view.findViewById(R.id.notesNewTitle);
         txtDescription = view.findViewById(R.id.notesNewDescription);
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    viewModel.setSaveDone();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override

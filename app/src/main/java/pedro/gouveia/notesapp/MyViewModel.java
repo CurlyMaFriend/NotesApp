@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import android.os.Handler;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,6 +20,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.LogRecord;
 
 public class MyViewModel extends ViewModel {
 
@@ -29,6 +35,9 @@ public class MyViewModel extends ViewModel {
     public boolean saveDone = false;
     private Context context;
     private Note newNote = null; //editLongPressedNote
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ArrayList<String> tempDescritpions;
+    private Handler handler = new Handler();
 
     public void setNavigateNewNote(){
         navigateNewNote.setValue(navigateNewNote.getValue() + 1);
@@ -79,13 +88,21 @@ public class MyViewModel extends ViewModel {
                 i++;
             }
 
-            noteArrayList.forEach(note -> {
-                Log.d("teste", "Titulo: " + note.getTitle());
-                Log.d("teste", "Descricao: " + note.getDescription());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    setNotes(noteArrayList);
+                    setSaveDone();
+                }
             });
-
-            setNotes(noteArrayList);
-            setSaveDone();
+        } else {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    setNotes(new ArrayList<Note>());
+                    setSaveDone();
+                }
+            });
         }
 
     }
@@ -114,19 +131,21 @@ public class MyViewModel extends ViewModel {
 
         Note nNote;
 
-        ArrayList<Note> notesAux = notes.getValue();
+        ArrayList<Note> auxArray = notes.getValue();
 
         if(newNote == null){
             nNote = new Note(getNewId(), aTitle, aDescription);
-            notesAux.add(nNote);
+            auxArray.add(nNote);
             newNote = nNote;
         } else {
             nNote = new Note(newNote.getId(), aTitle, aDescription);
-            notesAux.set(notesAux.indexOf(newNote), nNote);
+            auxArray.set(auxArray.indexOf(newNote), nNote);
             newNote = nNote;
         }
-        persistNotes(notesAux);
-        notes.setValue(notesAux);
+        notes.setValue(auxArray);
+
+
+        executor.execute(new NotePersistance(auxArray, context));
     }
 
     public int getNewId(){
@@ -172,8 +191,10 @@ public class MyViewModel extends ViewModel {
 
         auxArray.set(auxArray.indexOf(selectedNote.getValue()), editedNote);
 
-        persistNotes(auxArray);
         notes.setValue(auxArray);
+
+
+        executor.execute(new NotePersistance(auxArray, context));
     }
 
     public void editTitleNote(int aNoteId, String aTitle){
@@ -185,9 +206,11 @@ public class MyViewModel extends ViewModel {
         n.setTitle(aTitle);
         auxArray.set(i, n);
 
-        persistNotes(auxArray);
         notes.setValue(auxArray);
         setSaveDone();
+
+
+        executor.execute(new NotePersistance(auxArray, context));
     }
 
     public Note getNoteById(int id){
@@ -206,37 +229,10 @@ public class MyViewModel extends ViewModel {
 
         auxArray.remove(getNoteById(aSelectedNoteId));
 
-        persistNotes(auxArray);
         notes.setValue(auxArray);
         setSaveDone();
+
+        executor.execute(new NotePersistance(auxArray, context));
     }
 
-    public void persistNotes(ArrayList<Note> notesArray){
-
-        boolean flag = false;
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        Set<String> auxSet = sp.getStringSet("notes", null);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.clear().commit();
-        HashSet<String> mSet = new HashSet<>();
-
-        PrintStream output = null;
-        try {
-            output = new PrintStream(context.openFileOutput("notes.txt", context.MODE_PRIVATE));
-            flag = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(flag){
-            for(Note n : notesArray){
-                mSet.add(n.getId()+"-"+n.getTitle());
-                output.println(n.getId()+"-"+n.getDescription()+"\t");
-            }
-            output.close();
-            editor.putStringSet("notes", mSet);
-            editor.apply();
-        }
-
-    }
 }
