@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -58,12 +60,30 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
         listViewNotes.setAdapter(adapter);
 
         listViewNotes.setOnItemClickListener(this);
+
+        listViewNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> adapterView, View v,
+                                           int i, long l) {
+                Note note = notesArray.get(i);
+
+                customDialog cdd=new customDialog(requireActivity(), note.getId(), note.getTitle());
+                cdd.show();
+
+
+                Window window = cdd.getWindow();
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                return true;
+            }
+        });
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String title = adapterView.getItemAtPosition(i).toString();
-        Log.d("teste", "Clicked: " + title);
+        Note note = notesArray.get(i);
+
+        viewModel.setSelectedNote(note);
     }
 
     @Override
@@ -97,6 +117,7 @@ public class NoteList extends Fragment implements AdapterView.OnItemClickListene
         int id = item.getItemId();
 
         if(id == R.id.create_note){
+            viewModel.setNavigateNewNote();
             Log.d("teste", "Create note pressed");
         }
         return true;

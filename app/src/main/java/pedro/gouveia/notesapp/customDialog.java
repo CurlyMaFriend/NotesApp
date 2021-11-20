@@ -2,25 +2,34 @@ package pedro.gouveia.notesapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 public class customDialog extends Dialog implements View.OnClickListener {
 
-    public Activity c;
-    public Dialog d;
-    public Button btnEdit, btnDel, btnSave, btnCancel;
-    public EditText editTitulo;
-    public ImageButton cancelX;
+    private Dialog d;
+    private Button btnEdit, btnDel, btnSave, btnCancel;
+    private EditText editTitulo;
+    private ImageButton cancelX;
+    private int selectedNoteId;
+    private String selectedNoteTitle;
+    private MyViewModel viewModel;
+    private FragmentActivity fa;
 
-    public customDialog(Activity a) {
-        super(a);
-        // TODO Auto-generated constructor stub
-        this.c = a;
+    public customDialog(FragmentActivity aFA, int noteId, String noteTitle) {
+        super(aFA);
+        selectedNoteId = noteId;
+        fa = aFA;
+        selectedNoteTitle = noteTitle;
     }
 
     @Override
@@ -42,6 +51,7 @@ public class customDialog extends Dialog implements View.OnClickListener {
         btnCancel.setOnClickListener(this);
         cancelX.setOnClickListener(this);
 
+        viewModel = new ViewModelProvider(fa).get(MyViewModel.class);
     }
 
     @Override
@@ -51,14 +61,24 @@ public class customDialog extends Dialog implements View.OnClickListener {
                 btnEdit.setVisibility(View.GONE);
                 btnDel.setVisibility(View.GONE);
                 editTitulo.setVisibility(View.VISIBLE);
+                editTitulo.setText(selectedNoteTitle);
                 btnSave.setVisibility(View.VISIBLE);
                 btnCancel.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_Delete:
-                // Eliminar a note
+                viewModel.deleteTitleNote(selectedNoteId);
+                Toast.makeText(fa, "Note deleted", Toast.LENGTH_SHORT).show();
+                dismiss();
                 break;
             case R.id.btn_Save:
-                // Alterar o título da note
+                String title = editTitulo.getText().toString();
+                if(!title.equals("")){
+                    viewModel.editTitleNote(selectedNoteId, title);;
+                    Toast.makeText(fa, "Saved changes", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    Toast.makeText(fa, "Title is mandatory", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_Cancel:
                 btnEdit.setVisibility(View.VISIBLE);
@@ -74,4 +94,5 @@ public class customDialog extends Dialog implements View.OnClickListener {
                 break;
         }
     }
+
 }

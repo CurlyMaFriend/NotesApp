@@ -8,14 +8,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <EditText
             android:id="@+id/notesNewTitle"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:ems="10"
-            android:hint="Título"
+            android:hint="Title"
             android:inputType="textPersonName" />
 
         <EditText
@@ -24,7 +25,8 @@
             android:layout_height="match_parent"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="Descrição da nota"
-            android:inputType="textMultiLine" />
+            android:hint="Note Description"
+            android:inputType="textMultiLine"
+            android:paddingTop="50dp" />
     </LinearLayout>
 </FrameLayout>

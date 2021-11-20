@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="405dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:layoutDescription="@xml/custom_dialog_scene">
@@ -28,6 +28,8 @@
         android:id="@+id/edit_Titulo"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="Título"
         android:inputType="textPersonName"
@@ -36,26 +38,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_Edit"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="50px"
             android:text="Editar"
             android:visibility="visible" />
 
         <Button
-            android:id="@+id/btn_Delete"
-            style="@style/btnDialog"
-            android:text="Eliminar"
-            android:visibility="visible" />
-
-        <Button
             android:id="@+id/btn_Save"
             style="@style/btnDialog"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Gravar"
             android:visibility="gone" />
@@ -63,10 +60,17 @@
         <Button
             android:id="@+id/btn_Cancel"
             style="@style/btnDialog"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancelar"
             android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_Delete"
+            style="@style/btnDialog"
+            android:layout_width="wrap_content"
+            android:text="Eliminar"
+            android:visibility="visible" />
 
     </LinearLayout>
 
