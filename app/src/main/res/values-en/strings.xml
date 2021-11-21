@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotesApp</string>
+    <string name="btn_Save">Save</string>
+    <string name="btn_Cancel">Cancel</string>
+    <string name="btn_Delete">Delete</string>
+    <string name="btn_Edit">Edit</string>
+    <string name="edit_Titulo">Title</string>
+    <string name="dialog_Info">Chose the wanted option</string>
+    <string name="txtNoNotes">No notes on the list to present</string>
+</resources>

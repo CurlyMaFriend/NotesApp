@@ -1,5 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NotesApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_Save">Gravar</string>
+    <string name="btn_Cancel">Cancelar</string>
+    <string name="btn_Delete">Eliminar</string>
+    <string name="btn_Edit">Editar</string>
+    <string name="edit_Titulo">Titulo</string>
+    <string name="dialog_Info">Selecione a opção desejada</string>
+    <string name="txtNoNotes">Sem notas para apresentar</string>
 </resources>

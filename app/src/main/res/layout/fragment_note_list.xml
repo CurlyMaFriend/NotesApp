@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="No notes to be displayed\nPlease insert some notes."
+        android:text="@string/txtNoNotes"
         android:textAlignment="center"
         android:textSize="20dp"
         android:visibility="visible"

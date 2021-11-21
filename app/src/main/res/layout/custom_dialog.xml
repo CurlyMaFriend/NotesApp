@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="71dp"
         android:gravity="center"
-        android:text="Selecione a opção desejada"
+        android:text="@string/dialog_Info"
         android:textSize="20sp" />
 
     <EditText
@@ -31,7 +31,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:ems="10"
-        android:hint="Título"
+        android:hint="@string/edit_Titulo"
         android:inputType="textPersonName"
         android:visibility="gone" />
 
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="50px"
-            android:text="Editar"
+            android:text="@string/btn_Edit"
             android:visibility="visible" />
 
         <Button
@@ -54,7 +54,7 @@
             style="@style/btnDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gravar"
+            android:text="@string/btn_Save"
             android:visibility="gone" />
 
         <Button
@@ -62,14 +62,14 @@
             style="@style/btnDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar"
+            android:text="@string/btn_Cancel"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btn_Delete"
             style="@style/btnDialog"
             android:layout_width="wrap_content"
-            android:text="Eliminar"
+            android:text="@string/btn_Delete"
             android:visibility="visible" />
 
     </LinearLayout>
